@@ -4,17 +4,53 @@ import Dashboard  from './components/Dashboard'
 import Display from './components/Dashboard'
 
 class App extends React.Component {
-  state = {
-    balls: 0,
-    strikes: 0
+  constructor(props) {
+    super(props);
+    this.state = {
+      balls: 0,
+      strikes: 0,
+  };
+}
+
+ballChange = event => {
+  this.setState(prevState => {
+    return {
+      balls: prevState.balls + 1, 
+    }
+  })
+};
+
+strikeChange = event => {
+  this.setState(prevState => {
+    return {
+      strikes: prevState.strikes + 1, 
+    }
+  })
+};
+
+getHit = event => {
+  this.setState({
+    balls: 0, 
+    strikes: 0,
+  })
+};
+
+componentDidUpdate = (prevProps, prevState) => {
+  if ((this.state.balls > 3) || (this.state.strikes > 2)) {
+    this.setState({
+      balls: 0,
+      strikes: 0,
+    })
   }
+}
+
 
   render () {
     return (
       <div className="App">
         <h1>BASEBALL SCORECARD</h1>
-        <Display numBalls={this.numBalls} numStrikes={this.numStrikes}/>
-        <Dashboard callBall={this.callBall} callStrike={this.callStrike} callFoul={this.callFoul} callHit={this.callHit}/>
+        <Display numBalls={this.state.numBalls} numStrikes={this.state.numStrikes}/>
+        <Dashboard callBall={this.ballChange} callStrike={this.strikeChange} callFoul={this.ballChange} callHit={this.getHit}/>
       </div>
     )
   }
